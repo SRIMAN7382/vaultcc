@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NEXT_DISABLE_TURBOPACK=1 next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "16.1.1",
@@ -25,13 +25,5 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "typescript": "^5"
-  },
-  {
-  "scripts": {
-    "dev": "NEXT_DISABLE_TURBOPACK=1 next dev",
-    "build": "next build",
-    "start": "next start"
   }
-}
-
 }
