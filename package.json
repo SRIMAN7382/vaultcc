@@ -25,5 +25,13 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "typescript": "^5"
+  },
+  {
+  "scripts": {
+    "dev": "NEXT_DISABLE_TURBOPACK=1 next dev",
+    "build": "next build",
+    "start": "next start"
   }
+}
+
 }
