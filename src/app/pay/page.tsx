@@ -1,13 +1,13 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import LuxCard from '@/components/ui/LuxCard';
 import LuxButton from '@/components/ui/LuxButton';
 import { getBills, markPaid } from '@/lib/billsStore';
 import { addPayment } from '@/lib/paymentsStore';
 
-export default function PayPage() {
+function PayPageContent() {
   const router = useRouter();
   const sp = useSearchParams();
   const billId = sp.get('bill');
@@ -65,5 +65,17 @@ export default function PayPage() {
         </div>
       </LuxCard>
     </main>
+  );
+}
+
+export default function PayPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-white/60">Loading...</div>
+      </div>
+    }>
+      <PayPageContent />
+    </Suspense>
   );
 }

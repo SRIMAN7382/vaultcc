@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, Suspense } from 'react';
 import LuxCard from '@/components/ui/LuxCard';
 import LuxButton from '@/components/ui/LuxButton';
 import { getPaymentById, type VaultPayment } from '@/lib/paymentsStore';
@@ -12,7 +12,7 @@ function formatINR(n: number) {
   return Number(n).toLocaleString('en-IN');
 }
 
-export default function ReceiptPage() {
+function ReceiptPageContent() {
   const router = useRouter();
   const sp = useSearchParams();
   const id = sp.get('id') ?? '';
@@ -96,5 +96,17 @@ export default function ReceiptPage() {
         </LuxCard>
       </div>
     </main>
+  );
+}
+
+export default function ReceiptPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-white/60">Loading...</div>
+      </div>
+    }>
+      <ReceiptPageContent />
+    </Suspense>
   );
 }

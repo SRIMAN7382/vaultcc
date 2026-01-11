@@ -8,6 +8,7 @@ import LuxButton from '@/components/ui/LuxButton';
 export default function AuthPage() {
   const router = useRouter();
   const [mobile, setMobile] = useState('');
+  const [focused, setFocused] = useState(false);
 
   const goNext = () => {
     const cleaned = mobile.replace(/\D/g, '');
@@ -18,50 +19,91 @@ export default function AuthPage() {
     router.push(`/auth/otp?m=${encodeURIComponent(cleaned)}`);
   };
 
-  return (
-    <main className="min-h-screen flex items-center justify-center px-6">
-      <div className="w-full max-w-md relative">
-        <div className="absolute -top-20 right-6 h-64 w-64 rounded-full bg-vault/20 blur-3xl" />
-        <div className="absolute -bottom-20 left-6 h-64 w-64 rounded-full bg-cyan/15 blur-3xl" />
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      goNext();
+    }
+  };
 
-        <LuxCard className="p-7">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-xs text-muted">VaultCC Secure Entry</div>
-              <h1 className="mt-1 text-2xl font-semibold">Continue with Mobile</h1>
-            </div>
-            <div className="h-10 w-10 rounded-2xl bg-white/5 border border-line grid place-items-center shadow-glow">
-              <span className="text-sm font-bold">V</span>
-            </div>
+  return (
+    <main className="min-h-screen flex items-center justify-center px-6 py-12">
+      <div className="w-full max-w-md relative">
+        <div className="absolute -top-32 -right-20 h-96 w-96 rounded-full bg-vault/15 blur-3xl animate-pulse" />
+        <div className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-cyan/12 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+
+        <div className="relative z-10 mb-8 text-center">
+          <div className="inline-flex h-16 w-16 rounded-3xl bg-gradient-to-br from-vault/20 to-cyan/20 border border-vault/30 shadow-[0_0_40px_rgba(0,229,168,0.2)] grid place-items-center mb-4">
+            <span className="text-2xl font-bold bg-gradient-to-br from-vault to-cyan bg-clip-text text-transparent">
+              V
+            </span>
+          </div>
+          <h1 className="text-3xl font-bold">Welcome to VaultCC</h1>
+          <p className="mt-2 text-white/60">Your premium credit card command center</p>
+        </div>
+
+        <LuxCard className="p-8 relative z-10">
+          <div className="mb-6">
+            <div className="text-xs uppercase tracking-wider text-muted/60 mb-1">Secure Authentication</div>
+            <h2 className="text-xl font-semibold">Continue with Mobile</h2>
           </div>
 
-          <p className="mt-4 text-sm text-muted leading-relaxed">
-            Your mobile number is your VaultCC identity. We use OTP for maximum security.
+          <p className="text-sm text-white/70 leading-relaxed mb-8">
+            Enter your mobile number to receive a secure OTP. We use bank-grade encryption for your safety.
           </p>
 
-          <div className="mt-6">
-            <label className="text-xs text-muted">Mobile Number</label>
-            <div className="mt-2 flex items-center gap-3 rounded-2xl border border-line bg-white/5 px-4 py-3">
-              <span className="text-sm text-muted">+91</span>
+          <div className="space-y-2 mb-8">
+            <label className="text-xs font-medium text-white/80 uppercase tracking-wide">
+              Mobile Number
+            </label>
+            <div className={`flex items-center gap-3 rounded-2xl glass-input px-5 py-4 transition-all ${
+              focused ? 'ring-2 ring-vault/40 border-vault/40' : ''
+            }`}>
+              <span className="text-sm font-medium text-muted select-none">+91</span>
+              <div className="h-6 w-px bg-white/10" />
               <input
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                onKeyPress={handleKeyPress}
                 inputMode="numeric"
                 placeholder="Enter 10-digit number"
-                className="w-full bg-transparent outline-none text-sm"
+                className="flex-1 bg-transparent outline-none text-base placeholder:text-white/30"
+                autoFocus
               />
+            </div>
+            <div className="text-xs text-white/40 pl-1">
+              We'll send you a 6-digit OTP for verification
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-3">
-            <LuxButton onClick={goNext}>Send OTP</LuxButton>
-            <LuxButton variant="ghost" onClick={() => router.push('/')}>
+          <div className="space-y-3 mb-6">
+            <LuxButton onClick={goNext} className="w-full">
+              Send OTP
+            </LuxButton>
+            <LuxButton variant="ghost" onClick={() => router.push('/')} className="w-full">
               Back to Home
             </LuxButton>
           </div>
 
-          <div className="mt-6 text-xs text-muted">By continuing, you agree to Terms & Privacy.</div>
+          <div className="pt-6 border-t border-white/[0.06] text-center">
+            <p className="text-xs text-white/40">
+              By continuing, you agree to our{' '}
+              <button className="text-vault hover:underline">Terms of Service</button>
+              {' '}and{' '}
+              <button className="text-vault hover:underline">Privacy Policy</button>
+            </p>
+          </div>
         </LuxCard>
+
+        <div className="mt-6 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.02] border border-white/[0.06]">
+            <svg className="w-4 h-4 text-vault" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            </svg>
+            <span className="text-xs text-white/60">Secured with 256-bit encryption</span>
+          </div>
+        </div>
       </div>
     </main>
   );
